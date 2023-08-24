@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeServeHub", "HomeServeHub\HomeServeHub.csproj", "{0318D98A-992F-4542-8077-BA5B8565F152}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeServeHub", "HomeServeHub\HomeServeHub.csproj", "{0318D98A-992F-4542-8077-BA5B8565F152}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeServeHub.Models", "HomeServeHub.Models\HomeServeHub.Models.csproj", "{F2C02FEE-5876-45B3-B785-C8E34540C140}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeServeHub.Models", "HomeServeHub.Models\HomeServeHub.Models.csproj", "{F2C02FEE-5876-45B3-B785-C8E34540C140}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeServeHub.DataAccess", "HomeServeHub.DataAccess\HomeServeHub.DataAccess.csproj", "{3E69A2B3-305F-43A6-B989-DCFF51DA0617}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{F2C02FEE-5876-45B3-B785-C8E34540C140}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F2C02FEE-5876-45B3-B785-C8E34540C140}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F2C02FEE-5876-45B3-B785-C8E34540C140}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E69A2B3-305F-43A6-B989-DCFF51DA0617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E69A2B3-305F-43A6-B989-DCFF51DA0617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E69A2B3-305F-43A6-B989-DCFF51DA0617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E69A2B3-305F-43A6-B989-DCFF51DA0617}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
