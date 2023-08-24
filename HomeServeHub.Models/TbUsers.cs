@@ -9,6 +9,11 @@ namespace HomeServeHub.Models
 {
     public class TbUsers
     {
+        public TbUsers()
+        {
+            ServiceProvider = new HashSet<TbServiceProvider>();
+        }
+
         [Key]
         public int UserID { get; set; }
 
@@ -34,5 +39,11 @@ namespace HomeServeHub.Models
 
         [MaxLength(100, ErrorMessage = "يجب ألا يتجاوز طول حقل عنوان المستخدم أكثر من 100 حرف.")]
         public string Address { get; set; }
+
+        [Required(ErrorMessage = "حقل حالة المستخدم مطلوب.")]
+        public int UserCurrentState { get; set; }
+
+        // كود العلاقة بين الجدولين
+        public virtual ICollection<TbServiceProvider> ServiceProvider { get; set; }
     }
 }

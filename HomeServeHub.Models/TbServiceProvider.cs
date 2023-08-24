@@ -35,8 +35,9 @@ namespace HomeServeHub.Models
         [DataType(DataType.Date)]
         public DateTime EndDate { get; set; }
 
-        //Each record in the `TbUsers` table can match multiple records in the `TbServiceProvider` table,
-        //but each record in the `TbServiceProvider` table is the only record in the `TbUsers` table are connected
+        //The rules governing the relationship between the two tables are:
+        // - Each record in the `TbUsers` table can match multiple records in the `TbServiceProvider` table,
+        // - but each record in the `TbServiceProvider` table is the only record in the `TbUsers` table are connected
         [Required]
         public int UserID { get; set; }
 
