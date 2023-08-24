@@ -23,6 +23,30 @@ namespace HomeServeHub.Controllers
         public List<TbUser> GetAllUsers()
         {
             return _unitOfWork.TbUser.GetAll().ToList();
+
+            /* public List<TbUser> GetAllUsers()
+        {
+            var users = _unitOfWork.TbUser.GetAll().ToList();
+            var cleanedUsers = new List<object>();
+
+            foreach (var user in users)
+            {
+                // تنظيف البيانات قبل إرسالها إلى العرض
+                var cleanedUser = new
+                {
+                    user.UserID,
+                    user.Username,
+                    user.Email,
+                    user.UserType,
+                    user.PhoneNumber,
+                    user.Address
+                };
+
+                cleanedUsers.Add(cleanedUser);
+            }
+
+            return Ok(cleanedUsers);
+        }*/
         }
         #endregion
 

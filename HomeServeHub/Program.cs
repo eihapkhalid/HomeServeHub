@@ -1,5 +1,6 @@
 
 using HomeServeHub.DataAccess.Data;
+using HomeServeHub.DataAccess.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
 
 namespace HomeServeHub
@@ -20,6 +21,10 @@ namespace HomeServeHub
             #region DefaultConnection
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            #endregion
+
+            #region UnitOfWork
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
             var app = builder.Build();
