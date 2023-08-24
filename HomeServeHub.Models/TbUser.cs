@@ -13,6 +13,7 @@ namespace HomeServeHub.Models
         {
             ServiceProvider = new HashSet<TbServiceProvider>();
             Appointment = new HashSet<TbAppointment>();
+            PaymentDetail = new HashSet<TbPaymentDetail>();
         }
 
         [Key]
@@ -44,10 +45,15 @@ namespace HomeServeHub.Models
         [Required(ErrorMessage = "حقل حالة المستخدم مطلوب.")]
         public int UserCurrentState { get; set; }
 
+        /*********************************************************************/
+
         //list of ServiceProvider with only one user
         public virtual ICollection<TbServiceProvider> ServiceProvider { get; set; }
 
         //list of Appointments with only one user
         public virtual ICollection<TbAppointment> Appointment{ get; set; }
+
+        //list of PaymentDetails with only one user
+        public virtual ICollection<TbPaymentDetail> PaymentDetail { get; set; }
     }
 }
