@@ -10,6 +10,10 @@ namespace HomeServeHub.Models
 {
     public class TbService
     {
+        public TbService()
+        {
+            Appointment = new HashSet<TbAppointment>();
+        }
 
         [Key]
         public int ServiceID { get; set; }
@@ -37,6 +41,9 @@ namespace HomeServeHub.Models
 
         [ForeignKey("ServiceProviderID")]
         public TbServiceProvider ServiceProvider { get; set; }
+
+        //list of Appointments with only one service
+        public virtual ICollection<TbAppointment> Appointment { get; set; }
 
     }
 }

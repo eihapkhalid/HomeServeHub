@@ -12,6 +12,7 @@ namespace HomeServeHub.Models
         public TbUser()
         {
             ServiceProvider = new HashSet<TbServiceProvider>();
+            Appointment = new HashSet<TbAppointment>();
         }
 
         [Key]
@@ -43,7 +44,10 @@ namespace HomeServeHub.Models
         [Required(ErrorMessage = "حقل حالة المستخدم مطلوب.")]
         public int UserCurrentState { get; set; }
 
-        // كود العلاقة بين الجدولين
+        //list of ServiceProvider with only one user
         public virtual ICollection<TbServiceProvider> ServiceProvider { get; set; }
+
+        //list of Appointments with only one user
+        public virtual ICollection<TbAppointment> Appointment{ get; set; }
     }
 }
