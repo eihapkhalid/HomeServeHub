@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace HomeServeHub.Models
 {
-    public class TbUsers
+    public class TbUser
     {
-        public TbUsers()
+        public TbUser()
         {
             ServiceProvider = new HashSet<TbServiceProvider>();
         }

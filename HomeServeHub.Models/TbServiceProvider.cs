@@ -42,6 +42,6 @@ namespace HomeServeHub.Models
         public int UserID { get; set; }
 
         [ForeignKey("UserID")]
-        public TbUsers User { get; set; }
+        public TbUser User { get; set; }
     }
 }
