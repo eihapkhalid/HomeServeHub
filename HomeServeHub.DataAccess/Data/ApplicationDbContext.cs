@@ -54,29 +54,34 @@ namespace HomeServeHub.DataAccess.Data
                 .HasOne(sp => sp.User)
                 .WithMany(u => u.ServiceProvider)
                 .HasForeignKey(sp => sp.UserID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
 
             // Relationship between TbAppointment and TbServiceProvider
             modelBuilder.Entity<TbAppointment>()
                 .HasOne(a => a.ServiceProvider)
                 .WithMany(sp => sp.Appointment)
                 .HasForeignKey(a => a.ServiceProviderID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
 
             // Relationship between TbAppointment and TbService
             modelBuilder.Entity<TbAppointment>()
                 .HasOne(a => a.Service)
                 .WithMany(s => s.Appointment)
                 .HasForeignKey(a => a.ServiceID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
 
             // Relationship between TbAppointment and TbPaymentDetail
             modelBuilder.Entity<TbAppointment>()
                 .HasMany(a => a.PaymentDetail)
                 .WithOne(pd => pd.Appointment)
                 .HasForeignKey(pd => pd.AppointmentID)
-                .IsRequired();
+                .IsRequired()
+                .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
         }
+
 
     }
 }

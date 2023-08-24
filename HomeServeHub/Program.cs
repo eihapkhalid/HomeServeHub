@@ -1,4 +1,7 @@
 
+using HomeServeHub.DataAccess.Data;
+using Microsoft.EntityFrameworkCore;
+
 namespace HomeServeHub
 {
     public class Program
@@ -14,9 +17,14 @@ namespace HomeServeHub
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            #region DefaultConnection
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            #endregion
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            #region Configure the HTTP request pipeline
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -30,7 +38,8 @@ namespace HomeServeHub
 
             app.MapControllers();
 
-            app.Run();
+            app.Run(); 
+            #endregion
         }
     }
 }
