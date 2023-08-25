@@ -1,7 +1,10 @@
 
 using HomeServeHub.DataAccess.Data;
 using HomeServeHub.DataAccess.UnitOfWork;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace HomeServeHub
 {
@@ -27,6 +30,29 @@ namespace HomeServeHub
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             #endregion
 
+            #region JwtBearer Authentication
+            // Install-Package Microsoft.AspNetCore.Authentication.JwtBearer
+            builder.Services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(o =>
+            {
+                o.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                    ValidAudience = builder.Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey
+                    (Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = false,
+                    ValidateIssuerSigningKey = true
+                };
+            });
+            #endregion
+
             var app = builder.Build();
 
             #region Configure the HTTP request pipeline
@@ -38,6 +64,7 @@ namespace HomeServeHub
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

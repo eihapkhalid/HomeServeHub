@@ -1,6 +1,7 @@
 ﻿using HomeServeHub.DataAccess.UnitOfWork;
 using HomeServeHub.Models;
 using HomeServeHub.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,7 @@ namespace HomeServeHub.Controllers
         #endregion
         [HttpGet]
         [Route("GetAllUsers")]
+        [Authorize]
         public IActionResult GetAllUsers()
         {
             var users = _unitOfWork.TbUser.GetAll().ToList();
@@ -74,6 +76,7 @@ namespace HomeServeHub.Controllers
          }*/ 
         #endregion
         [HttpGet("GetUserById/{id}")]
+        [Authorize]
         public IActionResult GetUserById(int id)
         {
             var user = _unitOfWork.TbUser.Get(s => s.UserID == id);
@@ -170,11 +173,11 @@ namespace HomeServeHub.Controllers
             return Ok();
         }
 
-
         #endregion
 
         #region POST Delte user: api/<TransController>/Delete
         [HttpPost("DeleteUser")]
+        [Authorize]
         public IActionResult DeleteUser([FromBody] UserDTO newUserDTO)
         {
             if (newUserDTO == null)

@@ -1,13 +1,14 @@
 ﻿using HomeServeHub.DataAccess.UnitOfWork;
 using HomeServeHub.Models.DTO;
 using HomeServeHub.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HomeServeHub.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ServiceController : ControllerBase
     {
         #region Dependency Injection

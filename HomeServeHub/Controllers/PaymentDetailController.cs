@@ -1,14 +1,14 @@
 ﻿using HomeServeHub.DataAccess.UnitOfWork;
 using HomeServeHub.Models.DTO;
 using HomeServeHub.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HomeServeHub.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PaymentDetailController : ControllerBase
     {
         #region Dependency Injection

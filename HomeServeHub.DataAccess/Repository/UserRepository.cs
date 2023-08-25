@@ -25,5 +25,33 @@ namespace HomeServeHub.DataAccess.Repository
             _db.TbUsers.Update(obj);
         }
         #endregion
+
+        #region AuthorizeUser Function:
+        object IUserRepository.AuthorizeUser(string userName, string password)
+        {
+            try
+            {
+                TbUser user = _db.TbUsers.FirstOrDefault(u => u.Username == userName && u.PasswordHash == password);
+
+                if (user != null)
+                {
+                    return new TbUser
+                    {
+                        Username = user.Username,
+                        Email = user.Email
+                    };
+                }
+
+                return null; // يُعيد قيمة null إذا لم يتم العثور على المستخدم
+            }
+            catch (Exception ex)
+            {
+                // يُمكن توسيع إدارة الاستثناءات هنا حسب احتياجات التطبيق
+                Console.WriteLine("حدث خطأ أثناء معالجة تفويض المستخدم: " + ex.Message);
+                throw; // إعادة الاستثناء للطبقات العليا للتعامل معه
+            }
+        }
+        #endregion
+
     }
 }
