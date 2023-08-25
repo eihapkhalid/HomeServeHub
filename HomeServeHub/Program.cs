@@ -4,6 +4,7 @@ using HomeServeHub.DataAccess.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using System.Text;
 
 namespace HomeServeHub
@@ -52,6 +53,39 @@ namespace HomeServeHub
                 };
             });
             #endregion
+
+            #region AddSwaggerGen
+            builder.Services.AddSwaggerGen(c =>
+                {
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+
+                    // Add JWT Bearer token authentication
+                    var securityScheme = new OpenApiSecurityScheme
+                    {
+                        Name = "Bearer",
+                        Type = SecuritySchemeType.Http,
+                        Scheme = "bearer",
+                        BearerFormat = "JWT",
+                        In = ParameterLocation.Header,
+                        Description = "Enter your Bearer token in the format 'Bearer {token}'",
+                        Reference = new OpenApiReference
+                        {
+                            Type = ReferenceType.SecurityScheme,
+                            Id = JwtBearerDefaults.AuthenticationScheme
+                        }
+                    };
+
+                    c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
+
+                    var securityRequirement = new OpenApiSecurityRequirement
+                    {
+                    { securityScheme, Array.Empty<string>() }
+                    };
+
+                    c.AddSecurityRequirement(securityRequirement);
+                }); 
+            #endregion
+
 
             var app = builder.Build();
 

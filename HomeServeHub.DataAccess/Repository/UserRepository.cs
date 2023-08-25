@@ -27,7 +27,7 @@ namespace HomeServeHub.DataAccess.Repository
         #endregion
 
         #region AuthorizeUser Function:
-        object IUserRepository.AuthorizeUser(string userName, string password)
+        public TbUser AuthorizeUser(string userName, string password)
         {
             try
             {

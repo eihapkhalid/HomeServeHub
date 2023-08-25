@@ -1,7 +1,7 @@
 ﻿using HomeServeHub.DataAccess.UnitOfWork;
 using HomeServeHub.Models;
+using HomeServeHub.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -31,13 +31,13 @@ namespace HomeServeHub.Controllers
         [HttpPost("Login")]
         // [Route("Login")] dont write this !
         [AllowAnonymous]
-        public IActionResult Login([FromBody] TbUser user)
+        public IActionResult Login([FromBody] UserDTO user)
         {
             var response = Unauthorized();
             var xuser = _unitOfWork.TbUser.AuthorizeUser(user.Username, user.PasswordHash);
             if (xuser != null)
             {
-                var newToken = GenerateToken(HttpContext.RequestServices.GetRequiredService<IConfiguration>(), user);
+                var newToken = GenerateToken(HttpContext.RequestServices.GetRequiredService<IConfiguration>(), xuser);
                 return Ok(new { token = newToken });//new obj has key named token with value newToken 
             }
             return response;

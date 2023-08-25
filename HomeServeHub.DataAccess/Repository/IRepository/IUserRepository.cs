@@ -9,7 +9,7 @@ namespace HomeServeHub.DataAccess.Repository.IRepository
 {
     public interface IUserRepository : IRepository<TbUser>
     {
-        object AuthorizeUser(string username, string passwordHash);
+        TbUser AuthorizeUser(string username, string passwordHash);
         void Update(TbUser obj);
     }
 }
