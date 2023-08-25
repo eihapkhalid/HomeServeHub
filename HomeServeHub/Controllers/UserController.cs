@@ -33,7 +33,7 @@ namespace HomeServeHub.Controllers
         public IActionResult GetAllUsers()
         {
             var users = _unitOfWork.TbUser.GetAll().ToList();
-            if (users == null)
+            if (users == null || users.Count == 0)
             {
                 return NotFound();
             }
