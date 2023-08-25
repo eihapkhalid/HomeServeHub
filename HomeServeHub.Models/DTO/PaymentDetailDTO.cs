@@ -1,9 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace HomeServeHub.Models
+namespace HomeServeHub.Models.DTO
 {
-    public class TbPaymentDetail
+    public class PaymentDetailDTO
     {
         [Key]
         public int PaymentID { get; set; }
@@ -27,14 +26,8 @@ namespace HomeServeHub.Models
 
         [Required(ErrorMessage = "حقل معرّف المستخدم مطلوب.")]
         public int UserID { get; set; }
-        [ForeignKey("UserID")]
-        public TbUser User { get; set; }
-
 
         [Required(ErrorMessage = "حقل معرّف الحجز مطلوب.")]
         public int AppointmentID { get; set; }
-
-        [ForeignKey("AppointmentID")]
-        public TbAppointment Appointment { get; set; }
     }
 }
