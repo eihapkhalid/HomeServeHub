@@ -51,7 +51,6 @@ namespace HomeServeHub.Controllers
                     user.Username,
                     user.Email,
                     user.PasswordHash,
-                    user.UserType,
                     user.PhoneNumber,
                     user.Address,
                     user.UserCurrentState
@@ -92,7 +91,6 @@ namespace HomeServeHub.Controllers
                 user.UserID,
                 user.Username,
                 user.Email,
-                user.UserType,
                 user.PhoneNumber,
                 user.Address
             };
@@ -146,7 +144,6 @@ namespace HomeServeHub.Controllers
                 existingUser.Username = newUserDTO.Username;
                 existingUser.PasswordHash = newUserDTO.PasswordHash;
                 existingUser.Email = newUserDTO.Email;
-                existingUser.UserType = newUserDTO.UserType;
                 existingUser.PhoneNumber = newUserDTO.PhoneNumber;
                 existingUser.Address = newUserDTO.Address;
                 existingUser.UserCurrentState = newUserDTO.UserCurrentState;
@@ -160,7 +157,6 @@ namespace HomeServeHub.Controllers
                     Username = newUserDTO.Username,
                     PasswordHash = newUserDTO.PasswordHash,
                     Email = newUserDTO.Email,
-                    UserType = newUserDTO.UserType,
                     PhoneNumber = newUserDTO.PhoneNumber,
                     Address = newUserDTO.Address,
                     UserCurrentState = newUserDTO.UserCurrentState
@@ -190,7 +186,6 @@ namespace HomeServeHub.Controllers
                 Username = newUserDTO.Username,
                 PasswordHash = newUserDTO.PasswordHash,
                 Email = newUserDTO.Email,
-                UserType = newUserDTO.UserType,
                 PhoneNumber = newUserDTO.PhoneNumber,
                 Address = newUserDTO.Address,
                 UserCurrentState = newUserDTO.UserCurrentState

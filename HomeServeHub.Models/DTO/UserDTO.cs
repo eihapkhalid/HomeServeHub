@@ -20,8 +20,11 @@ namespace HomeServeHub.Models.DTO
         [RegularExpression(@"^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$", ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير وحرف صغير ورقم ورمز.")]
         public string PasswordHash { get; set; }
 
-        [Required(ErrorMessage = "يرجى تحديد نوع المستخدم.")]
-        public string UserType { get; set; }
+        /// <summary>
+        /// [Required(ErrorMessage = "يرجى تحديد نوع المستخدم.")]
+        /// public string UserType { get; set; }
+        /// </summary>
+
 
         [Phone(ErrorMessage = "الرقم الذي تم تقديمه غير صحيح.")]
         [RegularExpression(@"^\+?\d{10,15}$", ErrorMessage = "يرجى تقديم رقم جوال صحيح، يمكن أن يبدأ برمز البلد المعروف (+) ويحتوي على 10 إلى 15 رقم.")]

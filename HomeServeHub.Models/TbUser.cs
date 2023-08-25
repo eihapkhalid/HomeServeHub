@@ -14,6 +14,7 @@ namespace HomeServeHub.Models
             ServiceProvider = new HashSet<TbServiceProvider>();
             Appointment = new HashSet<TbAppointment>();
             PaymentDetail = new HashSet<TbPaymentDetail>();
+            UserType = new HashSet<TbUserType>();
         }
 
         [Key]
@@ -32,8 +33,11 @@ namespace HomeServeHub.Models
         [RegularExpression(@"^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*]).{8,}$", ErrorMessage = "كلمة المرور يجب أن تحتوي على حرف كبير وحرف صغير ورقم ورمز.")]
         public string PasswordHash { get; set; }
 
-        [Required(ErrorMessage = "يرجى تحديد نوع المستخدم.")]
-        public string UserType { get; set; }
+        /// <summary>
+        /// [Required(ErrorMessage = "يرجى تحديد نوع المستخدم.")]
+        /// public string UserType { get; set; }
+        /// </summary>
+
 
         [Phone(ErrorMessage = "الرقم الذي تم تقديمه غير صحيح.")]
         [RegularExpression(@"^\+?\d{10,15}$", ErrorMessage = "يرجى تقديم رقم جوال صحيح، يمكن أن يبدأ برمز البلد المعروف (+) ويحتوي على 10 إلى 15 رقم.")]
@@ -55,5 +59,8 @@ namespace HomeServeHub.Models
 
         //list of PaymentDetails with only one user
         public virtual ICollection<TbPaymentDetail> PaymentDetail { get; set; }
+
+        //list of PaymentDetails with only one user
+        public virtual ICollection<TbUserType> UserType { get; set; }
     }
 }

@@ -19,6 +19,7 @@ namespace HomeServeHub.DataAccess.Data
         public DbSet<TbService> TbServices { get; set; }
         public DbSet<TbServiceProvider> TbServiceProviders { get; set; }
         public DbSet<TbUser> TbUsers { get; set; }
+        public DbSet<TbUserType> TbUserTypes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -47,6 +48,13 @@ namespace HomeServeHub.DataAccess.Data
                 .HasMany(u => u.PaymentDetail)
                 .WithOne(pd => pd.User)
                 .HasForeignKey(pd => pd.UserID)
+                .IsRequired();
+
+            // Relationship between TbUser and TbUserType
+            modelBuilder.Entity<TbUser>()
+                .HasMany(u => u.UserType)
+                .WithOne(sp => sp.User)
+                .HasForeignKey(sp => sp.UserID)
                 .IsRequired();
 
             // Relationship between TbServiceProvider and TbUser
@@ -80,6 +88,8 @@ namespace HomeServeHub.DataAccess.Data
                 .HasForeignKey(pd => pd.AppointmentID)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
+
+            
         }
 
 

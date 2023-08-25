@@ -18,7 +18,7 @@ namespace HomeServeHub.DataAccess.UnitOfWork
         public IServiceProviderRepository TbServiceProvider { get; private set; }
         public IServiceRepository TbService { get; private set; }
         public IUserRepository TbUser { get; private set; }
-
+        public IUserTypeRepository TbUserType { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -27,6 +27,7 @@ namespace HomeServeHub.DataAccess.UnitOfWork
             TbServiceProvider = new ServiceProviderRepository(_db);
             TbService = new ServiceRepository(_db);
             TbUser = new UserRepository(_db);
+            TbUserType = new UserTypeRepository(_db);
         }
         #endregion
 

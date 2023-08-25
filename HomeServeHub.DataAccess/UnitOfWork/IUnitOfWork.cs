@@ -15,5 +15,6 @@ namespace HomeServeHub.DataAccess.UnitOfWork
         public IServiceProviderRepository TbServiceProvider { get; }
         public IServiceRepository TbService { get; }
         public IUserRepository TbUser { get; }
+        public IUserTypeRepository TbUserType { get; }
     }
 }
