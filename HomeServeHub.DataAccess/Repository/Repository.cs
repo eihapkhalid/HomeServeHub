@@ -25,13 +25,6 @@ namespace HomeServeHub.DataAccess.Repository
         }
         #endregion
 
-        #region AuthorizeUser
-        public TbUser AuthorizeUser(string userName, string password)
-        {
-            throw new NotImplementedException();
-        }
-        #endregion
-
         #region Get
         public T Get(Expression<Func<T, bool>> filter, string? includeProperties = null, bool tracked = false)
         {
