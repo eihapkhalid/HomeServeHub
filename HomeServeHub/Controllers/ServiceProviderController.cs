@@ -41,7 +41,6 @@ namespace HomeServeHub.Controllers
                     serviceprovider.ServiceProviderID,
                     serviceprovider.ServiceProviderType,
                     serviceprovider.ServiceProviderAvailability,
-                    serviceprovider.ServiceProviderPrice,
                     serviceprovider.ServiceProviderStartDate,
                     serviceprovider.ServiceProviderEndDate,
                     serviceprovider.ServiceProviderCurrentState,
@@ -74,7 +73,6 @@ namespace HomeServeHub.Controllers
                 serviceprovider.ServiceProviderID,
                 serviceprovider.ServiceProviderType,
                 serviceprovider.ServiceProviderAvailability,
-                serviceprovider.ServiceProviderPrice,
                 serviceprovider.ServiceProviderStartDate,
                 serviceprovider.ServiceProviderEndDate,
                 serviceprovider.ServiceProviderCurrentState,
@@ -100,7 +98,6 @@ namespace HomeServeHub.Controllers
                 // تحديث البيانات إذا كان المستخدم موجودًا
                 existingServiceProvider.ServiceProviderType = newServiceProviderDTO.ServiceProviderType;
                 existingServiceProvider.ServiceProviderAvailability = newServiceProviderDTO.ServiceProviderAvailability;
-                existingServiceProvider.ServiceProviderPrice = newServiceProviderDTO.ServiceProviderPrice;
                 existingServiceProvider.ServiceProviderStartDate = newServiceProviderDTO.ServiceProviderStartDate;
                 existingServiceProvider.ServiceProviderEndDate = newServiceProviderDTO.ServiceProviderEndDate;
                 existingServiceProvider.ServiceProviderCurrentState = newServiceProviderDTO.ServiceProviderCurrentState;
@@ -114,7 +111,6 @@ namespace HomeServeHub.Controllers
                 {
                 ServiceProviderType = newServiceProviderDTO.ServiceProviderType,
                 ServiceProviderAvailability = newServiceProviderDTO.ServiceProviderAvailability,
-                ServiceProviderPrice = newServiceProviderDTO.ServiceProviderPrice,
                 ServiceProviderStartDate = newServiceProviderDTO.ServiceProviderStartDate,
                 ServiceProviderEndDate = newServiceProviderDTO.ServiceProviderEndDate,
                 ServiceProviderCurrentState = newServiceProviderDTO.ServiceProviderCurrentState,
@@ -144,7 +140,6 @@ namespace HomeServeHub.Controllers
                 ServiceProviderID = newServiceProviderDTO.ServiceProviderID,
                 ServiceProviderType = newServiceProviderDTO.ServiceProviderType,
                 ServiceProviderAvailability = newServiceProviderDTO.ServiceProviderAvailability,
-                ServiceProviderPrice = newServiceProviderDTO.ServiceProviderPrice,
                 ServiceProviderStartDate = newServiceProviderDTO.ServiceProviderStartDate,
                 ServiceProviderEndDate = newServiceProviderDTO.ServiceProviderEndDate,
                 ServiceProviderCurrentState = newServiceProviderDTO.ServiceProviderCurrentState,

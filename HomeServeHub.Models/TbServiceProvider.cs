@@ -25,9 +25,12 @@ namespace HomeServeHub.Models
         [RegularExpression(@"^((\d{4}-\d{2}-\d{2} \d{2}:\d{2} [APap][Mm])-(\d{4}-\d{2}-\d{2} \d{2}:\d{2} [APap][Mm]))$", ErrorMessage = "تنسيق تواريخ وأوقات التوافر غير صحيح.")]
         public string ServiceProviderAvailability { get; set; }
 
-        [Required(ErrorMessage = "حقل سعر الخدمة مطلوب.")]
-        [Range(0, double.MaxValue, ErrorMessage = "سعر الخدمة يجب أن يكون أكبر من الصفر.")]
-        public decimal ServiceProviderPrice { get; set; }
+        /// <summary>
+        /// [Required(ErrorMessage = "حقل سعر الخدمة مطلوب.")]
+        /// [Range(0, double.MaxValue, ErrorMessage = "سعر الخدمة يجب أن يكون أكبر من الصفر.")]
+        /// public decimal ServiceProviderPrice { get; set; }
+        /// </summary>
+
 
         [Required(ErrorMessage = "حقل حالة مقدم الخدمة مطلوب.")]
         public int ServiceProviderCurrentState { get; set; }
