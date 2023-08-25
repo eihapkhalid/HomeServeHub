@@ -3,6 +3,7 @@ using HomeServeHub.Models.DTO;
 using HomeServeHub.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace HomeServeHub.Controllers
 {
@@ -85,43 +86,72 @@ namespace HomeServeHub.Controllers
         [HttpPost("PostpaymentDetail")]
         public IActionResult PostpaymentDetail([FromBody] PaymentDetailDTO newPaymentDetail)
         {
+            #region if newPaymentDetail null?
             if (newPaymentDetail == null)
             {
                 return BadRequest();
             }
+            #endregion
+            var appointment = _unitOfWork.TbAppointment.Get(a => a.AppointmentID == newPaymentDetail.AppointmentID);
+            var serviceCost = GetServiceCost(appointment.ServiceID); // استرداد قيمة ServiceCost
 
-            var existingPaymentDetail = _unitOfWork.TbPaymentDetail.Get(u => u.PaymentID == newPaymentDetail.PaymentID);
-            if (existingPaymentDetail != null)
+            #region if newPaymentDetail.PaymentAmount == serviceCost
+            if(newPaymentDetail.PaymentAmount == serviceCost)
             {
-                // تحديث البيانات إذا كان المستخدم موجودًا
-                existingPaymentDetail.PaymentMethod = newPaymentDetail.PaymentMethod;
-                existingPaymentDetail.PaymentAmount = newPaymentDetail.PaymentAmount;
-                existingPaymentDetail.PaymentDateTime = newPaymentDetail.PaymentDateTime;
-                existingPaymentDetail.UserID = newPaymentDetail.UserID;
-                existingPaymentDetail.PaymentCurrentState = newPaymentDetail.PaymentCurrentState;
-                existingPaymentDetail.AppointmentID = newPaymentDetail.AppointmentID;
-                _unitOfWork.TbPaymentDetail.Update(existingPaymentDetail);
+                // القيم متطابقة، يمكن إجراء العملية
+                var existingPaymentDetail = _unitOfWork.TbPaymentDetail.Get(u => u.PaymentID == newPaymentDetail.PaymentID);
+                if (existingPaymentDetail != null)
+                {
+                    // تحديث البيانات إذا كان المستخدم موجودًا
+                    existingPaymentDetail.PaymentMethod = newPaymentDetail.PaymentMethod;
+                    existingPaymentDetail.PaymentAmount = newPaymentDetail.PaymentAmount;
+                    existingPaymentDetail.PaymentDateTime = newPaymentDetail.PaymentDateTime;
+                    existingPaymentDetail.UserID = newPaymentDetail.UserID;
+                    existingPaymentDetail.PaymentCurrentState = newPaymentDetail.PaymentCurrentState;
+                    existingPaymentDetail.AppointmentID = newPaymentDetail.AppointmentID;
+                    _unitOfWork.TbPaymentDetail.Update(existingPaymentDetail);
+                }
+                else
+                {
+                    // إضافة المستخدم إذا كان غير موجود
+                    var newpaymentDetail = new TbPaymentDetail
+                    {
+                        PaymentMethod = newPaymentDetail.PaymentMethod,
+                        PaymentAmount = newPaymentDetail.PaymentAmount,
+                        PaymentDateTime = newPaymentDetail.PaymentDateTime,
+                        UserID = newPaymentDetail.UserID,
+                        PaymentCurrentState = newPaymentDetail.PaymentCurrentState,
+                        AppointmentID = newPaymentDetail.AppointmentID
+                    };
+                    _unitOfWork.TbPaymentDetail.Add(newpaymentDetail);
+                }
+
+                _unitOfWork.Save();
+
+                return Ok();
             }
             else
             {
-                // إضافة المستخدم إذا كان غير موجود
-                var newpaymentDetail = new TbPaymentDetail
-                {
-                    PaymentMethod = newPaymentDetail.PaymentMethod,
-                    PaymentAmount = newPaymentDetail.PaymentAmount,
-                    PaymentDateTime = newPaymentDetail.PaymentDateTime,
-                    UserID = newPaymentDetail.UserID,
-                    PaymentCurrentState = newPaymentDetail.PaymentCurrentState,
-                    AppointmentID = newPaymentDetail.AppointmentID
-            };
-                _unitOfWork.TbPaymentDetail.Add(newpaymentDetail);
-            }
-
-            _unitOfWork.Save();
-
-            return Ok();
+                return BadRequest("قيمة الدفع غير متطابقة مع قيمة تكلفة الخدمة.");
+            } 
+            #endregion
         }
 
+        #region GetServiceCost
+        private decimal GetServiceCost(int serviceID)
+        {
+            var service = _unitOfWork.TbService.Get(s => s.ServiceID == serviceID);
+
+            if (service != null)
+            {
+                return service.ServiceCost;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+        #endregion
 
         #endregion
 
