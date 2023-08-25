@@ -165,6 +165,7 @@ namespace HomeServeHub.Controllers
             }
             var newpaymentDetail = new TbPaymentDetail
             {
+                PaymentID = newPaymentDetail.PaymentID,
                 PaymentMethod = newPaymentDetail.PaymentMethod,
                 PaymentAmount = newPaymentDetail.PaymentAmount,
                 PaymentDateTime = newPaymentDetail.PaymentDateTime,
