@@ -57,7 +57,7 @@ namespace HomeServeHub.DataAccess.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("TbAppointments");
+                    b.ToTable("TbAppointments", (string)null);
                 });
 
             modelBuilder.Entity("HomeServeHub.Models.TbPaymentDetail", b =>
@@ -93,7 +93,7 @@ namespace HomeServeHub.DataAccess.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("TbPaymentDetails");
+                    b.ToTable("TbPaymentDetails", (string)null);
                 });
 
             modelBuilder.Entity("HomeServeHub.Models.TbService", b =>
@@ -127,7 +127,7 @@ namespace HomeServeHub.DataAccess.Migrations
 
                     b.HasIndex("ServiceProviderID");
 
-                    b.ToTable("TbServices");
+                    b.ToTable("TbServices", (string)null);
                 });
 
             modelBuilder.Entity("HomeServeHub.Models.TbServiceProvider", b =>
@@ -162,7 +162,7 @@ namespace HomeServeHub.DataAccess.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("TbServiceProviders");
+                    b.ToTable("TbServiceProviders", (string)null);
                 });
 
             modelBuilder.Entity("HomeServeHub.Models.TbUser", b =>
@@ -200,7 +200,7 @@ namespace HomeServeHub.DataAccess.Migrations
 
                     b.HasKey("UserID");
 
-                    b.ToTable("TbUsers");
+                    b.ToTable("TbUsers", (string)null);
                 });
 
             modelBuilder.Entity("HomeServeHub.Models.TbUserType", b =>
@@ -226,7 +226,7 @@ namespace HomeServeHub.DataAccess.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("TbUserTypes");
+                    b.ToTable("TbUserTypes", (string)null);
                 });
 
             modelBuilder.Entity("HomeServeHub.Models.TbAppointment", b =>
