@@ -24,7 +24,7 @@ namespace HomeServeHub.Controllers
         #region GET All users and Service Providers: api/<TransController>/Get
         [HttpGet]
         [Route("GetAllUserServiceProviders")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAllUserServiceProviders()
         {
             var viewModel = new UserServiceProvider
@@ -75,7 +75,7 @@ namespace HomeServeHub.Controllers
 
         #region GET user and userServiceProvider By Id: api/<TransController>/Get/5
         [HttpGet("GetUserServiceProviderById/{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetUserServiceProviderById(int id)
         {
             var user = _unitOfWork.TbUser.Get(s => s.UserID == id);
@@ -122,9 +122,9 @@ namespace HomeServeHub.Controllers
         #endregion
 
         #region POST New or Edit user: api/<TransController>
-        [HttpPost("PostUserUserType")]
-       // [Authorize]
-        public IActionResult PostUserUserType([FromBody] InputUserServiceProviderDTO viewModel)
+        [HttpPost("PostUserServiceProvider")]
+        [Authorize]
+        public IActionResult PostUserServiceProvider([FromBody] InputUserServiceProviderDTO viewModel)
         {
             if (viewModel == null)
             {

@@ -20,11 +20,14 @@ namespace HomeServeHub.Models
 
         [Required(ErrorMessage = "حقل نوع الخدمة مطلوب.")]
         public string ServiceProviderType { get; set; }
-
+        /*
         [Required(ErrorMessage = "حقل تواريخ وأوقات التوافر مطلوب.")]
         [RegularExpression(@"^\d{4}-\d{2}-\d{2} \d{2}:\d{2} [APap][Mm] - \d{4}-\d{2}-\d{2} \d{2}:\d{2} [APap][Mm]$", ErrorMessage = "تنسيق تواريخ وأوقات التوافر غير صحيح.")]
         public string ServiceProviderAvailability { get; set; }
-
+        */
+        [Required(ErrorMessage = "حقل تواريخ وأوقات التوافر مطلوب.")]
+        [RegularExpression(@"^((\d{4}-\d{2}-\d{2} \d{2}:\d{2} [APap][Mm])-(\d{4}-\d{2}-\d{2} \d{2}:\d{2} [APap][Mm]))$", ErrorMessage = "تنسيق تواريخ وأوقات التوافر غير صحيح.")]
+        public string ServiceProviderAvailability { get; set; }
         /// <summary>
         /// [Required(ErrorMessage = "حقل سعر الخدمة مطلوب.")]
         /// [Range(0, double.MaxValue, ErrorMessage = "سعر الخدمة يجب أن يكون أكبر من الصفر.")]
