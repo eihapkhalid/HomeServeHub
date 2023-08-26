@@ -11,29 +11,30 @@ namespace HomeServeHub.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserServiceProviderController : ControllerBase
+    public class UserUserTypeServiceProviderController : ControllerBase
     {
         #region Dependency Injection
         private readonly IUnitOfWork _unitOfWork;
-        public UserServiceProviderController(IUnitOfWork unitOfWork)
+        public UserUserTypeServiceProviderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
         #endregion
 
-        #region GET All users and Service Providers: api/<TransController>/Get
+        #region GET All users, Users types and Service Providers: api/<TransController>/Get
         [HttpGet]
-        [Route("GetAllUserServiceProviders")]
+        [Route("GetAllUserUserTypeServiceProviders")]
         [Authorize]
-        public IActionResult GetAllUserServiceProviders()
+        public IActionResult GetAllUserUserTypeServiceProviders()
         {
-            var viewModel = new UserServiceProvideViewModelr
+            var viewModel = new UserUserTypeServiceProviderViewModel
             {
                 LisTbServiceProvider = _unitOfWork.TbServiceProvider.GetAll().ToList(),
-                LisTbUser = _unitOfWork.TbUser.GetAll().ToList()
+                LisTbUser = _unitOfWork.TbUser.GetAll().ToList(),
+                LisTbUserType = _unitOfWork.TbUserType.GetAll().ToList()
             };
 
-            if (!viewModel.LisTbServiceProvider.Any() && !viewModel.LisTbUser.Any())
+            if (!viewModel.LisTbServiceProvider.Any() && !viewModel.LisTbUser.Any() && !viewModel.LisTbUserType.Any())
             {
                 return NotFound();
             }
@@ -50,7 +51,14 @@ namespace HomeServeHub.Controllers
                     user.Address,
                     user.UserCurrentState
                 }).ToList(),
-                UserTypes = viewModel.LisTbServiceProvider.Select(userServiceProvider => new
+                UserTypes = viewModel.LisTbUserType.Select(userType => new
+                {
+                    userType.UserTypeID,
+                    userType.UserTypeName,
+                    userType.UserTypeCurrentState,
+                    userType.UserID
+                }).ToList(),
+                ServiceProvider = viewModel.LisTbServiceProvider.Select(userServiceProvider => new
                 {
                     userServiceProvider.ServiceProviderID,
                     userServiceProvider.ServiceProviderType,
@@ -60,6 +68,7 @@ namespace HomeServeHub.Controllers
                     userServiceProvider.ServiceProviderEndDate,
                     userServiceProvider.UserID
                 }).ToList()
+                
             };
 
             var jsonSerializerOptions = new JsonSerializerOptions
@@ -74,14 +83,15 @@ namespace HomeServeHub.Controllers
         #endregion
 
         #region GET user and userServiceProvider By Id: api/<TransController>/Get/5
-        [HttpGet("GetUserServiceProviderById/{id}")]
+        [HttpGet("GetUserUserTypeServiceProviderById/{id}")]
         [Authorize]
-        public IActionResult GetUserServiceProviderById(int id)
+        public IActionResult GetUserUserTypeServiceProviderById(int id)
         {
             var user = _unitOfWork.TbUser.Get(s => s.UserID == id);
             var userServiceProvider = _unitOfWork.TbServiceProvider.Get(s => s.UserID == id);
+            var userType = _unitOfWork.TbUserType.Get(s => s.UserID == id);
 
-            if (user == null || userServiceProvider == null)
+            if (user == null && userServiceProvider == null && userType == null)
             {
                 return NotFound();
             }
@@ -97,6 +107,13 @@ namespace HomeServeHub.Controllers
                     user.PasswordHash,
                     user.Address,
                     user.UserCurrentState
+                },
+                UserType = new
+                {
+                    userType.UserTypeID,
+                    userType.UserTypeName,
+                    userType.UserTypeCurrentState,
+                    userType.UserID
                 },
                 userServiceProvider = new
                 {
@@ -120,11 +137,11 @@ namespace HomeServeHub.Controllers
             return Content(json, "application/json");
         }
         #endregion
-
-        #region POST New or Edit user: api/<TransController>
-        [HttpPost("PostUserServiceProvider")]
+        
+        #region POST New or Edit user, UserType and ServiceProvider: api/<TransController>
+        [HttpPost("PostUserUserTypeServiceProvider")]
         [Authorize]
-        public IActionResult PostUserServiceProvider([FromBody] InputUserServiceProviderDTO viewModel)
+        public IActionResult PostUserUserTypeServiceProvider([FromBody] InputUserUserTypeServiceProviderViewModeDTO viewModel)
         {
             if (viewModel == null)
             {
@@ -172,6 +189,42 @@ namespace HomeServeHub.Controllers
                     }
 
                     // التحقق من بيانات نوع المستخدم
+                    if (viewModel.inpTbUserType != null)
+                    {
+                        // في حالة وجود UserID، قم بتحديث نوع المستخدم
+                        if (viewModel.inpTbUserType.UserID != 0)
+                        {
+                            var existingUserType = _unitOfWork.TbUserType.Get(ut => ut.UserID == viewModel.inpTbUserType.UserID);
+                            if (existingUserType != null)
+                            {
+                                existingUserType.UserTypeName = viewModel.inpTbUserType.UserTypeName;
+                                existingUserType.UserTypeCurrentState = viewModel.inpTbUserType.UserTypeCurrentState;
+                                _unitOfWork.TbUserType.Update(existingUserType); // تحديث البيانات
+                            }
+                        }
+                        // إلا، قم بإضافة نوع مستخدم جديد
+                        else
+                        {
+                            var latestUserId = _unitOfWork.TbUser.GetAll()
+                                .OrderByDescending(u => u.UserID)
+                                .Select(u => u.UserID)
+                                .FirstOrDefault();
+
+                            var newUserType = new TbUserType
+                            {
+                                UserTypeName = viewModel.inpTbUserType.UserTypeName,
+                                UserTypeCurrentState = viewModel.inpTbUserType.UserTypeCurrentState,
+                                UserID = latestUserId
+                            };
+
+                            _unitOfWork.TbUserType.Add(newUserType);
+                            _unitOfWork.Save(); // حفظ التغييرات في هذا النقطة
+                        }
+                    }
+
+                    
+
+                    // التحقق من بيانات نوع المستخدم
                     if (viewModel.inpTbServiceProvider != null)
                     {
                         // في حالة وجود UserID، قم بتحديث نوع المستخدم
@@ -186,6 +239,7 @@ namespace HomeServeHub.Controllers
                                 userServiceProvider.ServiceProviderStartDate = viewModel.inpTbServiceProvider.ServiceProviderStartDate;
                                 userServiceProvider.ServiceProviderEndDate = viewModel.inpTbServiceProvider.ServiceProviderEndDate;
                                 _unitOfWork.TbServiceProvider.Update(userServiceProvider); // تحديث البيانات
+                                _unitOfWork.Save(); // حفظ التغييرات في هذا النقطة
                             }
                         }
                         // إلا، قم بإضافة نوع مستخدم جديد
@@ -211,7 +265,7 @@ namespace HomeServeHub.Controllers
                         }
                     }
 
-
+                    
                     // إتمام العمليات وحفظها داخل الحدود التراكنساكشن
                     transaction.Complete();
 
@@ -227,10 +281,10 @@ namespace HomeServeHub.Controllers
         }
         #endregion
         
-        #region POST Delete user: api/<TransController>/Delete
-        [HttpPost("DeleteUser")]
+        #region POST Delete user, User Type and Service Provider: api/<TransController>/Delete
+        [HttpPost("DeleteUserUserTypeServiceProvider")]
         [Authorize]
-        public IActionResult DeleteUser([FromBody] InputUserServiceProviderDTO viewModel)
+        public IActionResult DeleteUserUserTypeServiceProvider([FromBody] InputUserUserTypeServiceProviderViewModeDTO viewModel)
         {
             if (viewModel.inpTbUser == null || viewModel.inpTbServiceProvider == null)
             {
@@ -248,6 +302,16 @@ namespace HomeServeHub.Controllers
                         if (existingUser != null)
                         {
                             _unitOfWork.TbUser.Remove(existingUser); // حذف المستخدم
+                        }
+                    }
+
+                    // حذف نوع المستخدم إذا تم تقديم بياناته
+                    if (viewModel.inpTbUserType != null && viewModel.inpTbUserType.UserID != 0)
+                    {
+                        var existingUserType = _unitOfWork.TbUserType.Get(ut => ut.UserID == viewModel.inpTbUserType.UserID);
+                        if (existingUserType != null)
+                        {
+                            _unitOfWork.TbUserType.Remove(existingUserType); // حذف نوع المستخدم
                         }
                     }
 
