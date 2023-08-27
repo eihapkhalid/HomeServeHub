@@ -20,6 +20,7 @@ namespace HomeServeHub.DataAccess.Data
         public DbSet<TbServiceProvider> TbServiceProviders { get; set; }
         public DbSet<TbUser> TbUsers { get; set; }
         public DbSet<TbUserType> TbUserTypes { get; set; }
+        public DbSet<TbReview> TbReviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -57,6 +58,13 @@ namespace HomeServeHub.DataAccess.Data
                 .HasForeignKey(sp => sp.UserID)
                 .IsRequired();
 
+            // Relationship between TbUser and TbUserType
+            modelBuilder.Entity<TbUser>()
+                .HasMany(u => u.Review)
+                .WithOne(sp => sp.User)
+                .HasForeignKey(sp => sp.UserID)
+                .IsRequired();
+
             // Relationship between TbServiceProvider and TbUser
             modelBuilder.Entity<TbServiceProvider>()
                 .HasOne(sp => sp.User)
@@ -89,7 +97,12 @@ namespace HomeServeHub.DataAccess.Data
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
 
-            
+            // Relationship between TbReview and TbServiceProvider
+            modelBuilder.Entity<TbReview>()
+            .HasOne(r => r.ServiceProvider)
+            .WithMany()
+            .HasForeignKey(r => r.ServiceProviderID);
+
         }
 
 

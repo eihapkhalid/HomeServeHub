@@ -4,6 +4,7 @@ using HomeServeHub.DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HomeServeHub.DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230827054945_UpdateTbReview")]
+    partial class UpdateTbReview
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -112,13 +115,13 @@ namespace HomeServeHub.DataAccess.Migrations
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReviewCurrentState")
-                        .HasColumnType("int");
-
                     b.Property<int>("ServiceProviderID")
                         .HasColumnType("int");
 
                     b.Property<int?>("TbServiceProviderServiceProviderID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserCurrentState")
                         .HasColumnType("int");
 
                     b.Property<int>("UserID")

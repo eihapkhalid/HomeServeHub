@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace HomeServeHub.Models.ViewModels
 {
-    public class UserServiceProvideViewModelr
+    public class ReviewUserServiceProvideViewModel
     {
         public List<TbUser> LisTbUser { get; set; }
         public TbUser inpTbUser { get; set; }
         public List<TbServiceProvider> LisTbServiceProvider { get; set; }
         public TbServiceProvider inpTbServiceProvider { get; set; }
+        public List<TbReview> LisTbReview { get; set; }
+        public TbReview inpTbReview { get; set; }
     }
 }
