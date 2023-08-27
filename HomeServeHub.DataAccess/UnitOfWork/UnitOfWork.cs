@@ -15,6 +15,7 @@ namespace HomeServeHub.DataAccess.UnitOfWork
         public IUserRepository TbUser { get; private set; }
         public IUserTypeRepository TbUserType { get; private set; }
         public IReviewRepository TbReview { get; private set; }
+        public INotificationRepository TbNotification { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -25,6 +26,7 @@ namespace HomeServeHub.DataAccess.UnitOfWork
             TbUser = new UserRepository(_db);
             TbUserType = new UserTypeRepository(_db);
             TbReview = new ReviewRepository(_db);
+            TbNotification = new NotificationRepository(_db);
         }
         #endregion
 

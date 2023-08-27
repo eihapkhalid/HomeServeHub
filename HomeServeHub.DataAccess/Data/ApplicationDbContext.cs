@@ -21,6 +21,7 @@ namespace HomeServeHub.DataAccess.Data
         public DbSet<TbUser> TbUsers { get; set; }
         public DbSet<TbUserType> TbUserTypes { get; set; }
         public DbSet<TbReview> TbReviews { get; set; }
+        public DbSet<TbNotification> TbNotifications { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -65,6 +66,13 @@ namespace HomeServeHub.DataAccess.Data
                 .HasForeignKey(sp => sp.UserID)
                 .IsRequired();
 
+            // Relationship between TbUser and TbNotification
+            modelBuilder.Entity<TbUser>()
+                .HasMany(u => u.Notification)
+                .WithOne(sp => sp.User)
+                .HasForeignKey(sp => sp.UserID)
+                .IsRequired();
+
             // Relationship between TbServiceProvider and TbUser
             modelBuilder.Entity<TbServiceProvider>()
                 .HasOne(sp => sp.User)
@@ -72,6 +80,12 @@ namespace HomeServeHub.DataAccess.Data
                 .HasForeignKey(sp => sp.UserID)
                 .IsRequired()
                 .OnDelete(DeleteBehavior.NoAction); // Set to NO ACTION to avoid cascade paths
+
+            modelBuilder.Entity<TbServiceProvider>()
+                .HasMany(u => u.Notification)
+                .WithOne(pd => pd.ServiceProvider)
+                .HasForeignKey(pd => pd.UserID)
+                .IsRequired();
 
             // Relationship between TbAppointment and TbServiceProvider
             modelBuilder.Entity<TbAppointment>()

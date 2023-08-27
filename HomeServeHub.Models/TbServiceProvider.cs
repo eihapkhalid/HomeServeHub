@@ -14,6 +14,7 @@ namespace HomeServeHub.Models
         {
             Appointment = new HashSet<TbAppointment>();
             Review = new HashSet<TbReview>();
+            Notification = new HashSet<TbNotification>();
         }
 
         [Key]
@@ -65,5 +66,8 @@ namespace HomeServeHub.Models
 
         //list of Reviews with only one ServiceProvider
         public virtual ICollection<TbReview> Review { get; set; }
+
+        //list of Reviews with only one Notification
+        public virtual ICollection<TbNotification> Notification { get; set; }
     }
 }

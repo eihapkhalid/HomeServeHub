@@ -2,7 +2,6 @@
 using HomeServeHub.Models.DTO;
 using HomeServeHub.Models.ViewModels;
 using HomeServeHub.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
 
@@ -10,11 +9,11 @@ namespace HomeServeHub.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ReviewUserServiceProviderController : ControllerBase
+    public class NotificationUserServiceProviderController : ControllerBase
     {
         #region Dependency Injection
         private readonly IUnitOfWork _unitOfWork;
-        public ReviewUserServiceProviderController(IUnitOfWork unitOfWork)
+        public NotificationUserServiceProviderController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
@@ -23,17 +22,17 @@ namespace HomeServeHub.Controllers
         #region GET All Reviews, users and Service Providers: api/<TransController>/Get
         [HttpGet]
         [Route("GetAllReviewUserServiceProviders")]
-        [Authorize]
+        //[Authorize]
         public IActionResult GetAllReviewUserServiceProviders()
         {
-            var viewModel = new ReviewUserServiceProvideViewModel
+            var viewModel = new NotificationUserServiceProvideViewModel
             {
-                LisTbServiceProvider = _unitOfWork.TbServiceProvider.GetAll().ToList(),
                 LisTbUser = _unitOfWork.TbUser.GetAll().ToList(),
-                LisTbReview = _unitOfWork.TbReview.GetAll().ToList()
+                LisTbServiceProvider = _unitOfWork.TbServiceProvider.GetAll().ToList(),
+                LisTbNotification = _unitOfWork.TbNotification.GetAll().ToList()
             };
 
-            if (!viewModel.LisTbServiceProvider.Any() && !viewModel.LisTbUser.Any() && !viewModel.LisTbReview.Any())
+            if (!viewModel.LisTbServiceProvider.Any() && !viewModel.LisTbUser.Any() && !viewModel.LisTbNotification.Any())
             {
                 return NotFound();
             }
@@ -50,13 +49,14 @@ namespace HomeServeHub.Controllers
                     user.Address,
                     user.UserCurrentState
                 }).ToList(),
-                Reviews = viewModel.LisTbReview.Select(review => new
+                Notifications = viewModel.LisTbNotification.Select(notification => new
                 {
-                    review.ReviewID,
-                    review.Rating,
-                    review.Comment,
-                    review.ReviewCurrentState,
-                    review.UserID
+                    notification.NotificationId,
+                    notification.Content,
+                    notification.CreatedAt,
+                    notification.IsRead,
+                    notification.UserID,
+                    notification.ServiceProviderID
                 }).ToList(),
                 UserTypes = viewModel.LisTbServiceProvider.Select(userServiceProvider => new
                 {
@@ -81,14 +81,14 @@ namespace HomeServeHub.Controllers
         }
         #endregion
 
-        #region GET Review, user and ServiceProvider By Id: api/<TransController>/Get/5
-        [HttpGet("GetReviewUserServiceProviderById/{id}")]
-        [Authorize]
-        public IActionResult GetReviewUserServiceProviderById(int id)
+        #region GET Notification, user and ServiceProvider By Id: api/<TransController>/Get/5
+        [HttpGet("GetNotificationUserServiceProviderById/{id}")]
+        //[Authorize]
+        public IActionResult GetNotificationUserServiceProviderById(int id)
         {
             var user = _unitOfWork.TbUser.Get(s => s.UserID == id);
             var userServiceProvider = _unitOfWork.TbServiceProvider.Get(s => s.UserID == id);
-            var review = _unitOfWork.TbReview.Get(s => s.UserID == id);
+            var notification = _unitOfWork.TbNotification.Get(s => s.UserID == id);
 
             if (user == null || userServiceProvider == null)
             {
@@ -109,11 +109,12 @@ namespace HomeServeHub.Controllers
                 },
                 Review = new
                 {
-                    review.ReviewID,
-                    review.Rating,
-                    review.Comment,
-                    review.ReviewCurrentState,
-                    review.UserID
+                    notification.NotificationId,
+                    notification.Content,
+                    notification.CreatedAt,
+                    notification.IsRead,
+                    notification.UserID,
+                    notification.ServiceProviderID
                 },
                 userServiceProvider = new
                 {
@@ -138,42 +139,10 @@ namespace HomeServeHub.Controllers
         }
         #endregion
 
-        #region GET Average Rating: api/<TransController>/GetAverageRating
-        [HttpGet("GetAverageRating")]
-        [Authorize]
-        public IActionResult GetAverageRating()
-        {
-            var allReviews = _unitOfWork.TbReview.GetAll();
-
-            if (!allReviews.Any())
-            {
-                return NotFound("لم يتم العثور على تقييمات");
-            }
-
-            double totalRating = allReviews.Sum(review => review.Rating);
-            double averageRating = totalRating / allReviews.Count();
-
-            var result = new
-            {
-                AverageRating = averageRating
-            };
-
-            var jsonSerializerOptions = new JsonSerializerOptions
-            {
-                WriteIndented = true // تفعيل تنسيق الـ JSON لسهولة القراءة
-            };
-
-            var json = JsonSerializer.Serialize(result, jsonSerializerOptions);
-
-            return Content(json, "application/json");
-        }
-
-        #endregion
-
-        #region POST New or Edit Review, User and ServiceProvider: api/<TransController>
-        [HttpPost("PostReviewUserServiceProvider")]
-        [Authorize]
-        public IActionResult PostReviewUserServiceProvider([FromBody] InputReviewUserServiceProvideViewModelDTO viewModel)
+        #region POST New or Edit Notification, User and ServiceProvider: api/<TransController>
+        [HttpPost("PostNotificationUserServiceProvider")]
+        //[Authorize]
+        public IActionResult PostNotificationUserServiceProvider([FromBody] InputNotificationUserServiceProvideViewModelDTO viewModel)
         {
             if (viewModel == null)
             {
@@ -272,41 +241,42 @@ namespace HomeServeHub.Controllers
                         }
                     }
 
-                    // التحقق من  بيانات inpTbReview 
-                    if (viewModel.inpTbReview != null)
+                    // التحقق من  بيانات inpTbNotification 
+                    if (viewModel.inpTbNotification != null)
                     {
-                        if (viewModel.inpTbReview.ReviewID != 0)
+                        if (viewModel.inpTbNotification.NotificationId != 0)
                         {
-                            #region Review Update
+                            #region notification Update
 
-                            var review = _unitOfWork.TbReview.Get(ut => ut.UserID == viewModel.inpTbServiceProvider.UserID);
-                            if (review != null)
+                            var notification = _unitOfWork.TbNotification.Get(ut => ut.UserID == viewModel.inpTbNotification.UserID);
+                            if (notification != null)
                             {
-                                review.Rating = viewModel.inpTbReview.Rating;
-                                review.Comment = viewModel.inpTbReview.Comment;
-                                review.ReviewCurrentState = viewModel.inpTbReview.ReviewCurrentState;
-                                review.UserID = viewModel.inpTbReview.UserID;
-                                _unitOfWork.TbReview.Update(review); // تحديث البيانات
+                                notification.Content = viewModel.inpTbNotification.Content;
+                                notification.CreatedAt = viewModel.inpTbNotification.CreatedAt;
+                                notification.IsRead = viewModel.inpTbNotification.IsRead;
+                                notification.UserID = viewModel.inpTbNotification.UserID;
+                                notification.ServiceProviderID = viewModel.inpTbNotification.ServiceProviderID;
+                                _unitOfWork.TbNotification.Update(notification); // تحديث البيانات
                             }
                             #endregion
                         }
                         else
                         {
-                            #region Add Review
-                            var latestUserId=0;
-                            if (viewModel.inpTbReview.UserID == 0)
+                            #region Add notification
+                            var latestUserId = 0;
+                            if (viewModel.inpTbNotification.UserID == 0)
                             {
-                                 latestUserId = _unitOfWork.TbUser.GetAll()
-                                                    .OrderByDescending(u => u.UserID)
-                                                    .Select(u => u.UserID)
-                                                    .FirstOrDefault();
+                                latestUserId = _unitOfWork.TbUser.GetAll()
+                                                   .OrderByDescending(u => u.UserID)
+                                                   .Select(u => u.UserID)
+                                                   .FirstOrDefault();
                             }
                             else
                             {
-                                latestUserId = viewModel.inpTbReview.UserID;
+                                latestUserId = viewModel.inpTbNotification.UserID;
                             }
                             var latestServiceProviderId = 0;
-                            if (viewModel.inpTbReview.ServiceProviderID == 0)
+                            if (viewModel.inpTbNotification.ServiceProviderID == 0)
                             {
                                 latestServiceProviderId = _unitOfWork.TbServiceProvider.GetAll()
                                                     .OrderByDescending(u => u.ServiceProviderID)
@@ -315,20 +285,20 @@ namespace HomeServeHub.Controllers
                             }
                             else
                             {
-                                latestServiceProviderId = viewModel.inpTbReview.ServiceProviderID;
+                                latestServiceProviderId = viewModel.inpTbNotification.ServiceProviderID;
                             }
 
-                            var newReview = new TbReview
+                            var newNotificationw = new TbNotification
                             {
-                                Rating = viewModel.inpTbReview.Rating,
-                                Comment = viewModel.inpTbReview.Comment,
-                                ReviewCurrentState = viewModel.inpTbReview.ReviewCurrentState,
+                                Content = viewModel.inpTbNotification.Content,
+                                CreatedAt = viewModel.inpTbNotification.CreatedAt,
+                                IsRead = viewModel.inpTbNotification.IsRead,
                                 UserID = latestUserId,
-                                ServiceProviderID= latestServiceProviderId
-                                
+                                ServiceProviderID = latestServiceProviderId
+
                             };
 
-                            _unitOfWork.TbReview.Add(newReview);
+                            _unitOfWork.TbNotification.Add(newNotificationw);
                             _unitOfWork.Save(); // حفظ التغييرات في هذا النقطة
                             #endregion
                         }
@@ -344,19 +314,19 @@ namespace HomeServeHub.Controllers
                     // في حالة حدوث خطأ، يتم تراجع التراكنساكشن
                     #region Dispose
                     transaction.Dispose();
-                    return StatusCode(500, "حدث خطأ أثناء معالجة البيانات"); 
+                    return StatusCode(500, "حدث خطأ أثناء معالجة البيانات");
                     #endregion
                 }
             }
         }
         #endregion
 
-        #region POST Delete Review, User and ServiceProvider: api/<TransController>/Delete
-        [HttpPost("DeleteReviewUserServiceProvider")]
-        [Authorize]
-        public IActionResult DeleteReviewUserServiceProvider([FromBody] InputReviewUserServiceProvideViewModelDTO viewModel)
+        #region POST Delete Notification, User and ServiceProvider: api/<TransController>/Delete
+        [HttpPost("DeleteNotificationUserServiceProvider")]
+        //[Authorize]
+        public IActionResult DeleteNotificationUserServiceProvider([FromBody] InputNotificationUserServiceProvideViewModelDTO viewModel)
         {
-            if (viewModel.inpTbUser == null && viewModel.inpTbServiceProvider == null && viewModel.inpTbReview == null)
+            if (viewModel.inpTbUser == null && viewModel.inpTbServiceProvider == null && viewModel.inpTbNotification == null)
             {
                 return BadRequest("بيانات غير صالحة");
             }
@@ -365,7 +335,7 @@ namespace HomeServeHub.Controllers
             {
                 try
                 {
-                    
+
                     #region Delete User
                     if (viewModel.inpTbUser.UserID != 0)
                     {
@@ -388,13 +358,13 @@ namespace HomeServeHub.Controllers
                     }
                     #endregion
 
-                    #region Delete Review
-                    if (viewModel.inpTbReview != null && viewModel.inpTbReview.UserID != 0)
+                    #region Delete Notification
+                    if (viewModel.inpTbNotification != null && viewModel.inpTbNotification.UserID != 0)
                     {
-                        var review = _unitOfWork.TbReview.Get(ut => ut.UserID == viewModel.inpTbReview.UserID);
-                        if (review != null)
+                        var notification = _unitOfWork.TbNotification.Get(ut => ut.UserID == viewModel.inpTbNotification.UserID);
+                        if (notification != null)
                         {
-                            _unitOfWork.TbReview.Remove(review); // حذف نوع المستخدم
+                            _unitOfWork.TbNotification.Remove(notification); // حذف نوع المستخدم
                         }
                     }
                     #endregion
@@ -411,7 +381,7 @@ namespace HomeServeHub.Controllers
                     // في حالة حدوث خطأ، يتم تراجع التراكنساكشن
                     #region Dispose
                     transaction.Dispose();
-                    return StatusCode(500, "حدث خطأ أثناء معالجة البيانات"); 
+                    return StatusCode(500, "حدث خطأ أثناء معالجة البيانات");
                     #endregion
                 }
             }

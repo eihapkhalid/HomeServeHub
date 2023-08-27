@@ -17,5 +17,6 @@ namespace HomeServeHub.DataAccess.UnitOfWork
         public IUserRepository TbUser { get; }
         public IUserTypeRepository TbUserType { get; }
         public IReviewRepository TbReview { get; }
+        public INotificationRepository TbNotification { get; }
     }
 }

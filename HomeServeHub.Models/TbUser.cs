@@ -16,6 +16,7 @@ namespace HomeServeHub.Models
             PaymentDetail = new HashSet<TbPaymentDetail>();
             UserType = new HashSet<TbUserType>();
             Review = new HashSet<TbReview>();
+            Notification=new HashSet<TbNotification>();
         }
 
         [Key]
@@ -64,7 +65,10 @@ namespace HomeServeHub.Models
         //list of PaymentDetails with only one user
         public virtual ICollection<TbUserType> UserType { get; set; }
 
-        //list of Reviews with only one ServiceProvider
+        //list of Reviews with only one Review
         public virtual ICollection<TbReview> Review { get; set; }
+
+        //list of Reviews with only one Notification
+        public virtual ICollection<TbNotification> Notification { get; set; }
     }
 }
