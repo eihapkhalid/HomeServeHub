@@ -139,6 +139,43 @@ namespace HomeServeHub.Controllers
         }
         #endregion
 
+        #region GET Average Rating: api/<TransController>/GetAverageRating
+        [HttpGet("GetAverageRating")]
+        //[Authorize]
+        public IActionResult GetAverageRating()
+        {
+            var allReviews = _unitOfWork.TbReview.GetAll();
+
+            if (!allReviews.Any())
+            {
+                return NotFound("لم يتم العثور على تقييمات");
+            }
+
+            double totalRating = 0;
+            foreach (var review in allReviews)
+            {
+                totalRating += review.Rating;
+            }
+
+            double averageRating = totalRating / allReviews.Count();
+
+            var result = new
+            {
+                AverageRating = averageRating
+            };
+
+            var jsonSerializerOptions = new JsonSerializerOptions
+            {
+                WriteIndented = true // تفعيل تنسيق الـ JSON لسهولة القراءة
+            };
+
+            var json = JsonSerializer.Serialize(result, jsonSerializerOptions);
+
+            return Content(json, "application/json");
+        }
+        #endregion
+
+
         #region POST New or Edit Review, User and ServiceProvider: api/<TransController>
         [HttpPost("PostReviewUserServiceProvider")]
         //[Authorize]
