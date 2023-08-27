@@ -24,7 +24,7 @@ namespace HomeServeHub.Controllers
         #region GET All Reviews, users and Service Providers: api/<TransController>/Get
         [HttpGet]
         [Route("GetAllReviewUserServiceProviders")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAllReviewUserServiceProviders()
         {
             var viewModel = new ReviewUserServiceProvideViewModel
@@ -84,7 +84,7 @@ namespace HomeServeHub.Controllers
 
         #region GET Review, user and ServiceProvider By Id: api/<TransController>/Get/5
         [HttpGet("GetReviewUserServiceProviderById/{id}")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetReviewUserServiceProviderById(int id)
         {
             var user = _unitOfWork.TbUser.Get(s => s.UserID == id);
@@ -141,7 +141,7 @@ namespace HomeServeHub.Controllers
 
         #region GET Average Rating: api/<TransController>/GetAverageRating
         [HttpGet("GetAverageRating")]
-        //[Authorize]
+        [Authorize]
         public IActionResult GetAverageRating()
         {
             var allReviews = _unitOfWork.TbReview.GetAll();
@@ -151,12 +151,7 @@ namespace HomeServeHub.Controllers
                 return NotFound("لم يتم العثور على تقييمات");
             }
 
-            double totalRating = 0;
-            foreach (var review in allReviews)
-            {
-                totalRating += review.Rating;
-            }
-
+            double totalRating = allReviews.Sum(review => review.Rating);
             double averageRating = totalRating / allReviews.Count();
 
             var result = new
@@ -173,12 +168,12 @@ namespace HomeServeHub.Controllers
 
             return Content(json, "application/json");
         }
-        #endregion
 
+        #endregion
 
         #region POST New or Edit Review, User and ServiceProvider: api/<TransController>
         [HttpPost("PostReviewUserServiceProvider")]
-        //[Authorize]
+        [Authorize]
         public IActionResult PostReviewUserServiceProvider([FromBody] InputReviewUserServiceProvideViewModelDTO viewModel)
         {
             if (viewModel == null)
@@ -359,7 +354,7 @@ namespace HomeServeHub.Controllers
 
         #region POST Delete Review, User and ServiceProvider: api/<TransController>/Delete
         [HttpPost("DeleteReviewUserServiceProvider")]
-        //[Authorize]
+        [Authorize]
         public IActionResult DeleteReviewUserServiceProvider([FromBody] InputReviewUserServiceProvideViewModelDTO viewModel)
         {
             if (viewModel.inpTbUser == null && viewModel.inpTbServiceProvider == null && viewModel.inpTbReview == null)
